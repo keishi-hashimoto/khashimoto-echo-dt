@@ -61,16 +61,18 @@ jobs:
       # 依存関係をインストール
       - name: Uv add dependencies
         run: |
-          ls
-          pwd
-          mise doctor
+          source ~/.bashrc
           uv sync --no-dev
       # ビルド
       - name: Build
-        run: mise run build
+        run: |
+          source ~/.bashrc
+          mise run build
       # Pypi にアップロード
       - name: Upload to Pypi
-        run: mise run publish
+        run: |
+          source ~/.bashrc
+          mise run publish
         env:
           UV_PUBLISH_USERNAME: ${{ secrets.UV_PUBLISH_USERNAME }}
           UV_PUBLISH_PASSWORD: ${{ secrets.UV_PUBLISH_PASSWORD }}
