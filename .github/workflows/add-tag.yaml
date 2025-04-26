@@ -38,3 +38,28 @@ jobs:
           echo "latest=${latest}"
           test -z $latest || test "${VER}" gt "${latest#v}"
       # `version` と同一のタグを付与する
+      - name: Add tag
+        run: |
+          git tag -a "${{ github.head_ref }}" -m "Release ${{ github.head_ref }}"
+          git push origin "${{ github.head_ref }}"
+      # mise をインストール & 有効化
+      - name: Install mise
+        run: |
+          curl https://mise.run | sh
+          echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
+      - name: Activate mise
+        run: mise trust
+      - name: Install by using mise
+        run: mise install
+      # 依存関係をインストール
+      - name: Uv add dependencies
+        run: uv sync --no-dev
+      # ビルド
+      - name: Build
+        run: mise run build
+      # Pypi にアップロード
+      - name: Upload to Pypi
+        run: mise run publish
+        env:
+          UV_PUBLISH_USERNAME: ${{ secrets.UV_PUBLISH_USERNAME }}
+          UV_PUBLISH_PASSWORD: ${{ secrets.UV_PUBLISH_PASSWORD }}
