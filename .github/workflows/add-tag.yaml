@@ -61,18 +61,17 @@ jobs:
       # 依存関係をインストール
       - name: Uv add dependencies
         run: |
-          tail ~/.bashrc
-          mise activate bash
+          eval "$(~/.local/bin/mise activate bash)"
           uv sync --no-dev
       # ビルド
       - name: Build
         run: |
-          mise activate bash
+          eval "$(~/.local/bin/mise activate bash)"
           mise run build
       # Pypi にアップロード
       - name: Upload to Pypi
         run: |
-          mise activate bash
+          eval "$(~/.local/bin/mise activate bash)"
           mise run publish
         env:
           UV_PUBLISH_USERNAME: ${{ secrets.UV_PUBLISH_USERNAME }}
