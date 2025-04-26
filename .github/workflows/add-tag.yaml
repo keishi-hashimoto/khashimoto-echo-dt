@@ -1,11 +1,8 @@
 name: add-tag
 on:
-  pull-request:
+  pull_request:
     types:
       - opened
-      - reopened
-      - ready_for_review
-      - review_requested
     branches:
       - "v*"
 
