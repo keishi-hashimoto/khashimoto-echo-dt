@@ -1,6 +1,6 @@
 [project]
 name = "khashimoto-echo-dt"
-version = "0.1.5"
+version = "0.1.6"
 description = "This is a sample repository for building pip module with github actions."
 readme = "README.md"
 authors = [{ name = "K hashimoto", email = "keishi04hrikzira@gmail.com" }]
