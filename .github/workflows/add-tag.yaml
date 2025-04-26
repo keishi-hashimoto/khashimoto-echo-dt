@@ -54,6 +54,12 @@ jobs:
           echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
       - name: Activate mise
         run: mise trust
+      # mise の状態確認
+      - name: Check mise status
+        run: |
+          pwd
+          ls
+          mise doctor
       - name: Install by using mise
         run: mise install
       # 依存関係をインストール
