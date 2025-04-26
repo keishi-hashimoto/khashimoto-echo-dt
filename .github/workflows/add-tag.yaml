@@ -1,0 +1,40 @@
+name: add-tag
+on:
+  pull-request:
+    types:
+      - opened
+      - reopened
+      - ready_for_review
+      - review_requested
+    branches:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  add-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # pyproject.toml の `version` を確認
+      - name: Get version
+        run: |
+          ver_line=$(grep "version" pyproject.toml --max-count 1)
+          echo "VER=${ver_line##*= }" >> $GITHUB_ENV
+      # `version` がブランチ名と同一であるかを確認
+      - name: Compare version with branch name
+        run: |
+          echo "VER=${VER}, GITHUB_REF=${GITHUB_REF}"
+          test v"${VER}" = "${GITHUB_REF}"
+
+      # `version` が既存のタグよりも新しいことを確認する
+      - name: Check newer than existing tags
+        run: |
+          git fetch --tags
+          latest=$(git tag | sort --reverse | head -n 1)
+          echo "latest=${latest}"
+          test -z $latest || test "${VER}" gt "${latest#v}"
+      # `version` と同一のタグを付与する
