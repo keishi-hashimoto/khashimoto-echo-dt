@@ -61,6 +61,7 @@ jobs:
       # 依存関係をインストール
       - name: Uv add dependencies
         run: |
+          tail ~/.bashrc
           mise activate bash
           uv sync --no-dev
       # ビルド
